@@ -15,30 +15,36 @@ import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener
-{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, TabLayout.BaseOnTabSelectedListener {
     Button incidentsBtn;
     Button currentBtn;
     Button plannedBtn;
-
-    private ArrayList<RoadTrafficItem> incidents;
 
     private String incidentsSource = "https://trafficscotland.org/rss/feeds/currentincidents.aspx";
     private String plannedSource = "https://trafficscotland.org/rss/feeds/plannedroadworks.aspx";
     private String currentSource = "https://trafficscotland.org/rss/feeds/roadworks.aspx";
 
-    private RecyclerView mRecyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private RecyclerViewAdapter recyclerViewAdapter;
+    TabLayout mTabLayout;
+
+    private ListViewFragment listView;
+    private Fragment mapView;
+    private Fragment mFrag;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -46,51 +52,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        incidents = new ArrayList<RoadTrafficItem>();
+        mTabLayout = findViewById(R.id.tabLayout);
+        mTabLayout.addOnTabSelectedListener(this);
 
-        incidentsBtn = (Button) findViewById(R.id.incidentsBtn);
-        incidentsBtn.setOnClickListener(this);
+        listView = new ListViewFragment();
+        mapView = new MapsActivity();
 
-        currentBtn = (Button) findViewById(R.id.currentBtn);
-        currentBtn.setOnClickListener(this);
+        mFrag = listView;
 
-        plannedBtn = (Button) findViewById(R.id.plannedBtn);
-        plannedBtn.setOnClickListener(this);
-
-        recyclerViewAdapter = new RecyclerViewAdapter();
-
-        mRecyclerView = findViewById(R.id.recyclerView);
-        mLayoutManager = new LinearLayoutManager(this);
-
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(recyclerViewAdapter);
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.fragContainer, mFrag);
+        transaction.commit();
     }
 
 
     @Override
     public void onClick(View aview)
     {
-        if (aview == incidentsBtn)
-        {
-            incidentsBtn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.CornflowerBlue, null)));
-            currentBtn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.LightGrey, null)));
-            plannedBtn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.LightGrey, null)));
-            new ProcessUrlAsync(recyclerViewAdapter).execute(incidentsSource);
-        }
-        if (aview == currentBtn)
-        {
-            currentBtn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.CornflowerBlue, null)));
-            plannedBtn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.LightGrey, null)));
-            incidentsBtn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.LightGrey, null)));
-            new ProcessUrlAsync(recyclerViewAdapter).execute(currentSource);
-        }
-        if (aview == plannedBtn)
-        {
-            plannedBtn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.CornflowerBlue, null)));
-            currentBtn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.LightGrey, null)));
-            incidentsBtn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.LightGrey, null)));
-            new ProcessUrlAsync(recyclerViewAdapter).execute(plannedSource);
-        }
+
     }
 
     @Override
@@ -109,10 +89,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                recyclerViewAdapter.getFilter().filter(newText);
+                listView.getmRecyclerViewAdapter().getFilter().filter(newText);
                 return false;
             }
         });
         return true;
+    }
+
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        if (tab.getPosition() == 0) {
+            mFrag = listView;
+        } else if (tab.getPosition() == 1) {
+            mFrag = mapView;
+        }
+
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.fragContainer, mFrag);
+        transaction.commit();
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+
     }
 }

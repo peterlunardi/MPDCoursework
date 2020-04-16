@@ -3,6 +3,10 @@ package com.example.mpdcoursework;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -19,6 +23,8 @@ public class ProcessUrlAsync extends AsyncTask<String, Void, ArrayList<RoadTraff
     private String result;
     private ArrayList<RoadTrafficItem> items;
     private RecyclerViewAdapter recyclerViewAdapter;
+    private GoogleMap googleMap;
+    boolean usingMaps;
 
     @Override
     protected void onPreExecute() {
@@ -28,6 +34,12 @@ public class ProcessUrlAsync extends AsyncTask<String, Void, ArrayList<RoadTraff
     ProcessUrlAsync(RecyclerViewAdapter rva)
     {
         recyclerViewAdapter = rva;
+    }
+
+    ProcessUrlAsync(GoogleMap map)
+    {
+        googleMap = map;
+        usingMaps = true;
     }
 
     @Override
@@ -138,7 +150,18 @@ public class ProcessUrlAsync extends AsyncTask<String, Void, ArrayList<RoadTraff
     @Override
     protected void onPostExecute(ArrayList<RoadTrafficItem> trafficItems) {
         super.onPostExecute(trafficItems);
-        recyclerViewAdapter.SetItemList(trafficItems);
+        if(usingMaps)
+        {
+            for(RoadTrafficItem rti : trafficItems)
+            {
+                LatLng pos = new LatLng(rti.getLatitude(), rti.getLongitude());
+                googleMap.addMarker(new MarkerOptions().position(pos).title(rti.getTitle()));
+            }
+        }
+        else
+        {
+            recyclerViewAdapter.SetItemList(trafficItems);
+        }
     }
 
 
