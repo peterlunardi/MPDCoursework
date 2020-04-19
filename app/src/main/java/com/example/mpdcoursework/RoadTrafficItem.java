@@ -1,9 +1,12 @@
 package com.example.mpdcoursework;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.FormatFlagsConversionMismatchException;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 public class RoadTrafficItem {
     private String title = "";
@@ -11,8 +14,11 @@ public class RoadTrafficItem {
     private String link;
     private float latitude;
     private float longitude;
-    private String startDate;
-    private String endDate;
+    private Date startDate;
+    private Date endDate;
+    private String stringStartDate;
+    private String stringEndDate;
+    private float delayTime;
 
     public String getTitle() {
         return title;
@@ -41,11 +47,17 @@ public class RoadTrafficItem {
         {
             String[] splitString = description.split("<br />");
 
-            String start = splitString[0];
-            String end = splitString[1];
+            String strStart = splitString[0];
+            String strEnd = splitString[1];
 
-            setStartDate(start);
-            setEndDate(end);
+            this.stringStartDate = strStart;
+            this.stringEndDate = strEnd;
+
+            String[] start = splitString[0].split("Start Date: ");
+            String[] end = splitString[1].split("End Date: ");
+
+            setStartDate(stringToDateFormat(start[1]));
+            setEndDate(stringToDateFormat(end[1]));
 
             if(splitString.length > 2)
             {
@@ -58,10 +70,38 @@ public class RoadTrafficItem {
         }
         else
         {
-            setStartDate("No start date provided.");
-            setEndDate("No end date provided");
+            //setStartDate("No start date provided.");
+            //setEndDate("No end date provided");
             this.description = description;
         }
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getStringStartDate() {
+        return stringStartDate;
+    }
+
+    public String getStringEndDate() {
+        return stringEndDate;
+    }
+
+    public float getDelayTime() {
+        return delayTime;
     }
 
     public String getLink() {
@@ -88,24 +128,35 @@ public class RoadTrafficItem {
         this.longitude = longitude;
     }
 
-    public String getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-
-    public String getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
-    }
-
+    //rewrite this so it changes to a specific colour based on how long the roadworks will last
     public int getImage()
     {
-        return R.drawable.ic_warning;
+        long diffInMillies = Math.abs(getEndDate().getTime() - getStartDate().getTime());
+        long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+        this.delayTime = Math.round(diff);
+        if(diff <= 2)
+        {
+            return R.drawable.ic_warning_green;
+        }
+        else if (diff <= 7 && diff > 2)
+        {
+            return R.drawable.ic_warning_amber;
+        }
+        else if (diff > 7)
+        {
+            return R.drawable.ic_warning_red;
+        }
+        return R.drawable.ic_warning_red;
+    }
+
+    private Date stringToDateFormat(String string)
+    {
+        DateFormat format = new SimpleDateFormat("EEEE, dd MMMMM y - kk:mm", Locale.UK);
+        try {
+            return format.parse(string.trim());
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

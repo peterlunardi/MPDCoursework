@@ -23,12 +23,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public ImageView mImageView;
         public TextView mTitle;
         public TextView mDescription;
+        public TextView mDates;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             mImageView = itemView.findViewById(R.id.imageView);
             mTitle = itemView.findViewById(R.id.title);
             mDescription = itemView.findViewById(R.id.description);
+            mDates = itemView.findViewById(R.id.dates);
         }
     }
 
@@ -60,6 +62,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.mImageView.setImageResource(currentItem.getImage());
         holder.mTitle.setText(currentItem.getTitle());
         holder.mDescription.setText(currentItem.getDescription());
+        holder.mDates.setText(currentItem.getStringStartDate() + "\n" + currentItem.getStringEndDate() + "\n\n" + "Delay: " + currentItem.getDelayTime() + " days.");
     }
 
     @Override

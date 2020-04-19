@@ -155,7 +155,7 @@ public class ProcessUrlAsync extends AsyncTask<String, Void, ArrayList<RoadTraff
             for(RoadTrafficItem rti : trafficItems)
             {
                 LatLng pos = new LatLng(rti.getLatitude(), rti.getLongitude());
-                googleMap.addMarker(new MarkerOptions().position(pos).title(rti.getTitle()));
+                googleMap.addMarker(new MarkerOptions().position(pos).title(rti.getTitle()).snippet(rti.getDescription()));
             }
         }
         else
