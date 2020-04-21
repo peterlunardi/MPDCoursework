@@ -33,6 +33,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+
+Name: Peter Lunardi
+Student ID: S1636120
+
+ */
+
 public class MapsActivity extends Fragment implements OnMapReadyCallback, View.OnClickListener, Filterable {
 
     private GoogleMap mMap;

@@ -19,6 +19,13 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+/*
+
+Name: Peter Lunardi
+Student ID: S1636120
+
+ */
+
 public class ProcessUrlAsync extends AsyncTask<String, Void, ArrayList<RoadTrafficItem>> {
 
     private String result;

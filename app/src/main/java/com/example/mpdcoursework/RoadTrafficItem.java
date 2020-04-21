@@ -11,6 +11,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+/*
+
+Name: Peter Lunardi
+Student ID: S1636120
+
+ */
+
 public class RoadTrafficItem {
     private String title = "";
     private String description;

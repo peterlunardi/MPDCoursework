@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Name: Peter Lunardi
+Student ID: S1636120
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/listViewFragment"
+    android:orientation="horizontal">
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_below="@+id/appBar"
+        android:paddingHorizontal="4sp"
+        android:elevation="20dp">
+
+        <RadioButton
+            android:id="@+id/incidentsBtn"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Incidents"
+            android:button="@null"
+            android:drawableBottom="?android:attr/listChoiceIndicatorSingle"
+            android:gravity="center_horizontal|bottom">
+        </RadioButton>
+
+        <RadioButton
+            android:id="@+id/currentBtn"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Current \n Roadworks"
+            android:button="@null"
+            android:drawableBottom="?android:attr/listChoiceIndicatorSingle"
+            android:gravity="center_horizontal|bottom">
+
+        </RadioButton>
+
+        <RadioButton
+            android:id="@+id/plannedBtn"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Planned \n Roadworks"
+            android:button="@null"
+            android:drawableBottom="?android:attr/listChoiceIndicatorSingle"
+            android:gravity="center_horizontal|bottom">
+        </RadioButton>
+
+    </RadioGroup>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="4dp"
+            android:scrollbars="vertical"
+            android:background="@color/DarkGray"/>
+
+    </RelativeLayout>
+
+
+</LinearLayout>

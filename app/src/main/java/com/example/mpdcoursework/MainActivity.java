@@ -31,6 +31,13 @@ import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 
+/*
+
+Name: Peter Lunardi
+Student ID: S1636120
+
+ */
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, TabLayout.BaseOnTabSelectedListener {
     Button incidentsBtn;
     Button currentBtn;

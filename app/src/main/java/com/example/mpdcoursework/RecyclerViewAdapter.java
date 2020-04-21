@@ -15,6 +15,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/*
+
+Name: Peter Lunardi
+Student ID: S1636120
+
+ */
+
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> implements Filterable {
     private ArrayList<RoadTrafficItem> roadTrafficItems;
     private ArrayList<RoadTrafficItem> roadTrafficItemsFull;
