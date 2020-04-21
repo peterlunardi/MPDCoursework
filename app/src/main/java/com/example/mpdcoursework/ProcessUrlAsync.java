@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -23,7 +24,7 @@ public class ProcessUrlAsync extends AsyncTask<String, Void, ArrayList<RoadTraff
     private String result;
     private ArrayList<RoadTrafficItem> items;
     private RecyclerViewAdapter recyclerViewAdapter;
-    private GoogleMap googleMap;
+    private MapsActivity googleMap;
     boolean usingMaps;
 
     @Override
@@ -36,7 +37,7 @@ public class ProcessUrlAsync extends AsyncTask<String, Void, ArrayList<RoadTraff
         recyclerViewAdapter = rva;
     }
 
-    ProcessUrlAsync(GoogleMap map)
+    ProcessUrlAsync(MapsActivity map)
     {
         googleMap = map;
         usingMaps = true;
@@ -152,11 +153,7 @@ public class ProcessUrlAsync extends AsyncTask<String, Void, ArrayList<RoadTraff
         super.onPostExecute(trafficItems);
         if(usingMaps)
         {
-            for(RoadTrafficItem rti : trafficItems)
-            {
-                LatLng pos = new LatLng(rti.getLatitude(), rti.getLongitude());
-                googleMap.addMarker(new MarkerOptions().position(pos).title(rti.getTitle()).snippet(rti.getDescription()));
-            }
+            googleMap.setItemList(trafficItems);
         }
         else
         {

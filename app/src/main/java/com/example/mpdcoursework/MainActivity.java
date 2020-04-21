@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TabLayout mTabLayout;
 
     private ListViewFragment listView;
-    private Fragment mapView;
+    private MapsActivity mapView;
     private Fragment mFrag;
 
     @Override
@@ -64,8 +64,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(R.id.fragContainer, mFrag);
         transaction.commit();
-    }
 
+        listView.getmRecyclerViewAdapter().setOnItemClickListener(new RecyclerViewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                mapView.setSpecificItem(listView.getmRecyclerViewAdapter().clickedItem(position));
+                mTabLayout.getTabAt(1).select();
+            }
+        });
+    }
 
     @Override
     public void onClick(View aview)
@@ -90,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public boolean onQueryTextChange(String newText) {
                 listView.getmRecyclerViewAdapter().getFilter().filter(newText);
+                mapView.getFilter().filter(newText);
                 return false;
             }
         });
@@ -100,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onTabSelected(TabLayout.Tab tab) {
         if (tab.getPosition() == 0) {
             mFrag = listView;
+            mapView.setSpecificItem(null);
         } else if (tab.getPosition() == 1) {
             mFrag = mapView;
         }

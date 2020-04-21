@@ -59,6 +59,10 @@ public class RoadTrafficItem {
             setStartDate(stringToDateFormat(start[1]));
             setEndDate(stringToDateFormat(end[1]));
 
+            long diffInMillies = Math.abs(getEndDate().getTime() - getStartDate().getTime());
+            long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+            this.delayTime = Math.round(diff);
+
             if(splitString.length > 2)
             {
                 this.description = splitString[2];
@@ -131,18 +135,16 @@ public class RoadTrafficItem {
     //rewrite this so it changes to a specific colour based on how long the roadworks will last
     public int getImage()
     {
-        long diffInMillies = Math.abs(getEndDate().getTime() - getStartDate().getTime());
-        long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-        this.delayTime = Math.round(diff);
-        if(diff <= 2)
+
+        if(getDelayTime() <= 2)
         {
             return R.drawable.ic_warning_green;
         }
-        else if (diff <= 7 && diff > 2)
+        else if (getDelayTime() <= 7 && getDelayTime() > 2)
         {
             return R.drawable.ic_warning_amber;
         }
-        else if (diff > 7)
+        else if (getDelayTime() > 7)
         {
             return R.drawable.ic_warning_red;
         }

@@ -17,6 +17,7 @@ import java.util.List;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> implements Filterable {
     private ArrayList<RoadTrafficItem> roadTrafficItems;
     private ArrayList<RoadTrafficItem> roadTrafficItemsFull;
+    private OnItemClickListener mListener;
 
     public static class ViewHolder extends RecyclerView.ViewHolder
     {
@@ -25,19 +26,47 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public TextView mDescription;
         public TextView mDates;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
             mImageView = itemView.findViewById(R.id.imageView);
             mTitle = itemView.findViewById(R.id.title);
             mDescription = itemView.findViewById(R.id.description);
             mDates = itemView.findViewById(R.id.dates);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(listener != null)
+                    {
+                        int position = getAdapterPosition();
+                        if(position != RecyclerView.NO_POSITION)
+                        {
+                            listener.onItemClick(position);
+                        }
+                    }
+                }
+            });
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener)
+    {
+        mListener = listener;
     }
 
     RecyclerViewAdapter()
     {
         roadTrafficItems = new ArrayList<RoadTrafficItem>();
         roadTrafficItemsFull = new ArrayList<RoadTrafficItem>();
+    }
+
+    public RoadTrafficItem clickedItem(int position)
+    {
+        return roadTrafficItems.get(position);
     }
 
     public void SetItemList(ArrayList<RoadTrafficItem> items)
@@ -51,7 +80,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.traffic_item, parent, false);
-        ViewHolder vh = new ViewHolder(v);
+        ViewHolder vh = new ViewHolder(v, mListener);
         return vh;
     }
 
