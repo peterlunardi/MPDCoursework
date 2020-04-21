@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/listViewFragment"
+android:orientation="horizontal">
+
+<RadioGroup
+    android:id="@+id/buttonPanel"
+    android:layout_width="wrap_content"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:layout_below="@+id/appBar"
+    android:paddingHorizontal="4sp"
+    android:elevation="20dp">
+
+    <RadioButton
+        android:id="@+id/incidentsBtn"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Incidents"
+        android:button="@null"
+        android:drawableBottom="?android:attr/listChoiceIndicatorSingle"
+        android:gravity="center_horizontal|bottom">
+    </RadioButton>
+
+    <RadioButton
+        android:id="@+id/currentBtn"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Current \n Roadworks"
+        android:button="@null"
+        android:drawableBottom="?android:attr/listChoiceIndicatorSingle"
+        android:gravity="center_horizontal|bottom">
+    </RadioButton>
+
+    <RadioButton
+        android:id="@+id/plannedBtn"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Planned \n Roadworks"
+        android:button="@null"
+        android:drawableBottom="?android:attr/listChoiceIndicatorSingle"
+        android:gravity="center_horizontal|bottom">
+    </RadioButton>
+
+</RadioGroup>
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:map="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MapsActivity" />
+
+</LinearLayout>

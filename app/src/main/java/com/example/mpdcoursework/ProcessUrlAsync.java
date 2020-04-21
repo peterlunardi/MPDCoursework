@@ -160,6 +160,4 @@ public class ProcessUrlAsync extends AsyncTask<String, Void, ArrayList<RoadTraff
             recyclerViewAdapter.SetItemList(trafficItems);
         }
     }
-
-
 }

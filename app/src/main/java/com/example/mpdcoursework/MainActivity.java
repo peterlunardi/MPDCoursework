@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String currentSource = "https://trafficscotland.org/rss/feeds/roadworks.aspx";
 
     TabLayout mTabLayout;
+    int tabPos = 0;
 
     private ListViewFragment listView;
     private MapsActivity mapView;
@@ -57,6 +58,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         listView = new ListViewFragment();
         mapView = new MapsActivity();
+
+        listView.setmRecyclerViewAdapter(new RecyclerViewAdapter());
 
         mFrag = listView;
 
@@ -96,8 +99,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                listView.getmRecyclerViewAdapter().getFilter().filter(newText);
-                mapView.getFilter().filter(newText);
+                if(tabPos == 0)
+                {
+                    listView.getmRecyclerViewAdapter().getFilter().filter(newText);
+                }
+                else if (tabPos == 1)
+                {
+                    mapView.getFilter().filter(newText);
+                }
                 return false;
             }
         });
@@ -109,8 +118,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (tab.getPosition() == 0) {
             mFrag = listView;
             mapView.setSpecificItem(null);
+            tabPos = 0;
         } else if (tab.getPosition() == 1) {
             mFrag = mapView;
+            tabPos = 1;
         }
 
         FragmentManager manager = getSupportFragmentManager();

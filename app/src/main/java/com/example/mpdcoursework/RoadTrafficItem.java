@@ -3,8 +3,11 @@ package com.example.mpdcoursework;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.FormatFlagsConversionMismatchException;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -160,5 +163,50 @@ public class RoadTrafficItem {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public String getNumericalStartDate(Date dt)
+    {
+        SimpleDateFormat simpleDate =  new SimpleDateFormat("dd/MM/yyyy", Locale.UK);
+
+        String strDt = simpleDate.format(dt);
+
+        return strDt;
+    }
+
+    public String getNumericalEndDate(Date dt)
+    {
+        SimpleDateFormat simpleDate =  new SimpleDateFormat("dd/MM/yyyy", Locale.UK);
+
+        String strDt = simpleDate.format(dt);
+
+        return strDt;
+    }
+
+    public List<String> getDates()
+    {
+        ArrayList<Date> dates = new ArrayList<Date>();
+
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTime(getStartDate());
+
+
+        Calendar cal2 = Calendar.getInstance();
+        cal2.setTime(getEndDate());
+
+        while(!cal1.after(cal2))
+        {
+            dates.add(cal1.getTime());
+            cal1.add(Calendar.DATE, 1);
+        }
+
+        ArrayList<String> strDates = new ArrayList<>();
+        for(Date date: dates)
+        {
+            String s = getNumericalEndDate(date);
+            strDates.add(s);
+        }
+
+        return strDates;
     }
 }

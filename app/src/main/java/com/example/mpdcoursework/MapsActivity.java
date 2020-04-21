@@ -119,6 +119,22 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback, View.O
             }
         });
 
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+
+            Marker currentShown;
+
+            public boolean onMarkerClick(Marker marker) {
+                if (marker.equals(currentShown)) {
+                    marker.hideInfoWindow();
+                    currentShown = null;
+                } else {
+                    marker.showInfoWindow();
+                    currentShown = marker;
+                }
+                return true;
+            }
+        });
+
         //UpdateMap();
 
         LatLng startPoint = new LatLng(55.866487, -4.250019);
@@ -234,9 +250,22 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback, View.O
             {
                 String filterPattern = constraint.toString().toLowerCase().trim();
 
+                OUTER_LOOP:
                 for (RoadTrafficItem item : roadTrafficItemsFull)
                 {
-                    if(item.getTitle().toLowerCase().contains(filterPattern))
+                    for (String date : item.getDates())
+                    {
+                        if(date.contains(filterPattern))
+                        {
+                            filteredList.add(item);
+                            continue OUTER_LOOP;
+                        }
+                    }
+
+                    if(item.getTitle().toLowerCase().contains(filterPattern)
+                            || item.getNumericalStartDate(item.getStartDate()).contains(filterPattern)
+                            || item.getNumericalEndDate(item.getEndDate()).contains(filterPattern)
+                    )
                     {
                         filteredList.add(item);
                     }
@@ -249,9 +278,12 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback, View.O
 
         @Override
         protected void publishResults(CharSequence constraint, @NonNull FilterResults results) {
-            roadTrafficItems.clear();
-            roadTrafficItems.addAll((ArrayList)results.values);
-            showMarkers();
+            if(roadTrafficItems != null)
+            {
+                roadTrafficItems.clear();
+                roadTrafficItems.addAll((ArrayList)results.values);
+                showMarkers();
+            }
         }
     };
 }

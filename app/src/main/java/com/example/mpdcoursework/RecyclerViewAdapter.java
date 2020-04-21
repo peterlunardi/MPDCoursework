@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> implements Filterable {
@@ -91,7 +92,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.mImageView.setImageResource(currentItem.getImage());
         holder.mTitle.setText(currentItem.getTitle());
         holder.mDescription.setText(currentItem.getDescription());
-        holder.mDates.setText(currentItem.getStringStartDate() + "\n" + currentItem.getStringEndDate() + "\n\n" + "Delay: " + currentItem.getDelayTime() + " days.");
+        if(currentItem.getStartDate() != null)
+        {
+            holder.mDates.setText(currentItem.getStringStartDate() + "\n" + currentItem.getStringEndDate() + "\n\n" + "Delay: " + currentItem.getDelayTime() + " days.");
+        }
+        else holder.mDates.setText("");
+
     }
 
     @Override
@@ -119,9 +125,22 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             {
                 String filterPattern = constraint.toString().toLowerCase().trim();
 
+                OUTER_LOOP:
                 for (RoadTrafficItem item : roadTrafficItemsFull)
                 {
-                    if(item.getTitle().toLowerCase().contains(filterPattern))
+                    for (String date : item.getDates())
+                    {
+                        if(date.contains(filterPattern))
+                        {
+                            filteredList.add(item);
+                            continue OUTER_LOOP;
+                        }
+                    }
+
+                    if(item.getTitle().toLowerCase().contains(filterPattern)
+                            || item.getNumericalStartDate(item.getStartDate()).contains(filterPattern)
+                            || item.getNumericalEndDate(item.getEndDate()).contains(filterPattern)
+                    )
                     {
                         filteredList.add(item);
                     }
