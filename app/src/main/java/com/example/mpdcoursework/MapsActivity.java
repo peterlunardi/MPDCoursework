@@ -260,19 +260,38 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback, View.O
                 OUTER_LOOP:
                 for (RoadTrafficItem item : roadTrafficItemsFull)
                 {
-                    for (String date : item.getDates())
+                    if(item.getStartDate() != null)
                     {
-                        if(date.contains(filterPattern))
+                        for (String date : item.getDates())
                         {
-                            filteredList.add(item);
-                            continue OUTER_LOOP;
+                            if(date.contains(filterPattern))
+                            {
+                                filteredList.add(item);
+                                continue OUTER_LOOP;
+                            }
                         }
                     }
 
                     if(item.getTitle().toLowerCase().contains(filterPattern)
-                            || item.getNumericalStartDate(item.getStartDate()).contains(filterPattern)
-                            || item.getNumericalEndDate(item.getEndDate()).contains(filterPattern)
                     )
+                    {
+                        filteredList.add(item);
+                    }
+                    else if (item.getStartDate() != null)
+                    {
+                        if(item.getNumericalStartDate(item.getStartDate()).contains(filterPattern))
+                        {
+                            filteredList.add(item);
+                        }
+                    }
+                    else if (item.getEndDate() != null)
+                    {
+                        if((item.getNumericalEndDate(item.getEndDate()).contains(filterPattern)))
+                        {
+                            filteredList.add(item);
+                        }
+                    }
+                    else if(item.getDescription().toLowerCase().contains(filterPattern))
                     {
                         filteredList.add(item);
                     }
